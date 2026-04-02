@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>status shop (farfarstore)</title>
+  <style>
+    body {
+      font-family: Kanit;
+      text-align: center;
+      margin-top: 100px;
+    }
+    .open { color: green; font-size: 40px; }
+    .closed { color: red; font-size: 40px; }
+  </style>
+</head>
+
+<body>
+  <div id="status">กำลังโหลด...</div>
+
+  <script>
+    fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vTEZoEvYH5segQdH-65y4KzzdngpLKjQx4J3j7jXXWWNkFYyQf9jcSHVL0TfmBiWQtnoRlyewgOsof2/pub?output=csv")
+      .then(res => res.text())
+      .then(data => {
+        let rows = data.split("\n");
+        let status = rows[1].split(",")[1].trim();
+
+        let el = document.getElementById("status");
+
+        if (status === "open") {
+          el.innerHTML = "🟢 เปิดร้าน ทักได้ค่ะ";
+          el.className = "open";
+        } else {
+          el.innerHTML = "🔴 ปิดร้าน ไม่พร้อมตอบค่ะ";
+          el.className = "closed";
+        }
+      })
+      .catch(err => {
+        document.getElementById("status").innerText = "โหลดข้อมูลไม่ได้";
+        console.error(err);
+      });
+  </script>
+</body>
+</html>
